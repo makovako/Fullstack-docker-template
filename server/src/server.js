@@ -8,8 +8,8 @@ import initDb from './db/init'
 
 import User from './models/user'
 
-connectToDb();
-clearDb()
+connectToDb()
+.then(() => clearDb())
 .then(() => initDb());
 
 const app = express();
