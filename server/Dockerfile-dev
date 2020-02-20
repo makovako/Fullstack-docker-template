@@ -1,6 +1,8 @@
 FROM node
 
-RUN npm install -g nodemon
+RUN npm install -g nodemon @babel/core @babel/cli @babel/preset-env @babel/node
+# RUN npm install -g nodemon @babel/node
+
 
 RUN mkdir -p /app/server
 WORKDIR /app/server

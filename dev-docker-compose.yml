@@ -19,7 +19,7 @@ services:
             - 4000:4000
         volumes:
             - ./server/src:/app/server/src
-        command: nodemon -L src/server.js
+        command: nodemon -L src/server.js --exec babel-node
         links:
             - db
         restart: always

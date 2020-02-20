@@ -1,5 +1,5 @@
-const express = require("express");
-const mongoose = require("mongoose");
+import express from "express";
+import Mongoose from "mongoose";
 
 const port = process.env.PORT || 4000;
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/test";
@@ -11,12 +11,12 @@ const options = {
 };
 
 const conn = () => {
-  mongoose.connect(mongoUri, options);
+  Mongoose.connect(mongoUri, options);
 };
 
 conn();
 
-const db = mongoose.connection;
+const db = Mongoose.connection;
 db.on("error", err => {
   console.log("There was a problem connecting to mongo:", err);
   console.log("Trying again");
@@ -34,7 +34,7 @@ app.get("/welcome", async (req, res) => {
   );
 });
 
-const { Schema } = mongoose;
+const { Schema } = Mongoose;
 const userSchema = new Schema(
   {
     name: String
@@ -44,7 +44,7 @@ const userSchema = new Schema(
   }
 );
 
-const User = mongoose.model("User", userSchema);
+const User = Mongoose.model("User", userSchema);
 const user = new User({ name: "Big Bill Brown" });
 user
   .save()
