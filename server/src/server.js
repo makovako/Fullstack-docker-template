@@ -1,29 +1,24 @@
 import express from "express";
-import Mongoose from "mongoose";
 
-const port = process.env.PORT || 4000;
-const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/test";
+import { APP_PORT } from "./config";
+
+import connectToDb from './db/connect';
+import clearDb from './db/clear'
+import initDb from './db/init'
+
+import User from './models/user'
+
+connectToDb();
+clearDb()
+.then(() => initDb());
 
 const app = express();
 
-const options = {
-  useNewUrlParser: true
-};
+app.use(express.json())
 
-const conn = () => {
-  Mongoose.connect(mongoUri, options);
-};
-
-conn();
-
-const db = Mongoose.connection;
-db.on("error", err => {
-  console.log("There was a problem connecting to mongo:", err);
-  console.log("Trying again");
-  setTimeout(() => conn(), 5000);
+app.get("/", (req, res) => {
+  res.send("Hello World");
 });
-
-db.once("open", () => console.log("Successfully connected to mongo"));
 
 app.get("/welcome", async (req, res) => {
   console.log("Client request received");
@@ -34,24 +29,6 @@ app.get("/welcome", async (req, res) => {
   );
 });
 
-const { Schema } = Mongoose;
-const userSchema = new Schema(
-  {
-    name: String
-  },
-  {
-    timestamps: true
-  }
-);
-
-const User = Mongoose.model("User", userSchema);
-const user = new User({ name: "Big Bill Brown" });
-user
-  .save()
-  .then(user => console.log(`${user.name} saved to the database`))
-  .catch(err => console.log(err));
-
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-  
-})
+app.listen(APP_PORT, () => {
+  console.log(`Server running on ${APP_PORT}`);
+});
